@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dice Roll Probability</title>
+  <style>
+    .dice-image {
+      width: 50px;
+      height: 50px;
+    }
+    .container {
+      display: flex;
+    }
+    #dice-container {
+      margin-right: 20px;
+    }
+    table {
+      width: 200px;
+      border-collapse: collapse;
+      display: none; /* Hide the table initially */
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+  </style>
+  <script>
+    // Function to generate a random number between 1 and 6
+    function rollDie() {
+      return Math.floor(Math.random() * 6) + 1;
+    }
+
+    // Function to roll the specified number of dice and update the dice images
+    function rollDice(totalRolls) {
+      var diceContainer = document.getElementById("dice-container");
+      diceContainer.innerHTML = "";
+
+      for (var i = 0; i < totalRolls; i++) {
+        var face = rollDie();
+        var diceImage = document.createElement("img");
+        diceImage.src = "die" + face + ".png"; // Use the correct image filename
+        diceImage.alt = "Dice " + face;
+        diceImage.classList.add("dice-image");
+        diceContainer.appendChild(diceImage);
+
+        if ((i + 1) % 6 === 0) {
+          diceContainer.appendChild(document.createElement("br"));
+        }
+      }
+
+      // Show the probability table after rolling the dice
+      var probabilityTable = document.getElementById("probability-table");
+      probabilityTable.style.display = "table";
+    }
+
+    // Function to roll 12 dice and update the dice images and probability table
+    function roll12Dice() {
+      var faceCounts = [0, 0, 0, 0, 0, 0];
+      var totalRolls = 12;
+
+      rollDice(totalRolls);
+
+      // Update probability table
+      var probabilityTable = document.getElementById("probability-table");
+      probabilityTable.innerHTML = "<tr><th>Face</th><th>Probability</th></tr>";
+
+      for (var j = 0; j < totalRolls; j++) {
+        var face = rollDie();
+        faceCounts[face - 1]++;
+      }
+
+      for (var k = 0; k < 6; k++) {
+        var probability = ((faceCounts[k] / totalRolls) * 100).toFixed(2) + "%";
+        var row = document.createElement("tr");
+        var faceCell = document.createElement("td");
+        var probabilityCell = document.createElement("td");
+        faceCell.textContent = k + 1;
+        probabilityCell.textContent = probability;
+        row.appendChild(faceCell);
+        row.appendChild(probabilityCell);
+        probabilityTable.appendChild(row);
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Dice Roll Probability</h1>
+  <div class="container">
+    <div id="dice-container"></div>
+    <table id="probability-table">
+      <tr>
+        <th>Face</th>
+        <th>Probability</th>
+      </tr>
+    </table>
+  </div>
+  <button onclick="roll12Dice()">Roll 12 Dice</button>
+</body>
+</html>
